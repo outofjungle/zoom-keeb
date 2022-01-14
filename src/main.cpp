@@ -155,18 +155,26 @@ void renderScreen(uint8_t brightness = 10, uint8_t battLvl = 0)
     staticViewRendered = true;
   }
 
-  bool updateNow = (UI_UPDATE_INTERVAL < (now - last_updated));
-  updateNow = updateNow || (brightness != last_brightness);
+  bool updateNow = false;
+  if (UI_UPDATE_INTERVAL < (now - last_updated))
+  {
+    updateNow = true;
+    last_updated = now;
+  }
+
+  if (brightness != last_brightness)
+  {
+    updateNow = true;
+    last_brightness = brightness;
+  }
 
   if (updateNow)
   {
     M5.Axp.ScreenBreath(brightness);
 
-    uint8_t lvlWidth = (uint8_t)(battLvl / 2) - 4;
+    uint8_t lvlWidth = (uint8_t)((battLvl * 46) / 100);
+    M5.Lcd.fillRect(75, 5, 50, 20, BLACK);
     M5.Lcd.fillRect(77, 7, lvlWidth, 16, GREEN);
-
-    last_brightness = brightness;
-    last_updated = now;
   }
 }
 
