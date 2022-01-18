@@ -111,10 +111,13 @@ bool isNotMoved()
   float x, y, z, dx, dy, dz;
 
   M5.IMU.getGyroData(&x, &y, &z);
+  x = abs(x);
+  y = abs(y);
+  z = abs(z);
 
-  dx = lastX - abs(x);
-  dy = lastY - abs(y);
-  dz = lastZ - abs(z);
+  dx = lastX - x;
+  dy = lastY - y;
+  dz = lastZ - z;
 
   lastX = x;
   lastY = y;
